@@ -1,12 +1,26 @@
 import requests
 
+'''
+Built in LEDS:
+    LED3:
+        red: 50
+        green: 51
+        blue: 52
+    LED4:
+        red: 53
+        green: 54
+        blue: 55
+'''
+
 class Pin:
     OUTPUT=1
     INPUT=0
     PULLUP=2
-    LEGAL_PIN_NUMBERS = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,50]
+    LEGAL_PIN_NUMBERS = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,50,51,52,53,54,55]
+    ANALOG_TO_DIGIAL_NUMBERS={'A0':14,'A1':15,'A2':16,'A3':17,'A4':18,'A5':19}
     def __init__(self, pin_no, direction=1):
-        #TODO: Make sure that pin_no is in legal pin number range
+        if pin_no in self.ANALOG_TO_DIGIAL_NUMBERS:
+            pin_no = self.ANALOG_TO_DIGIAL_NUMBERS[pin_no]
         if not pin_no in self.LEGAL_PIN_NUMBERS:
             raise 'Pin number not valid'
         if not direction in [self.INPUT, self.OUTPUT, self.PULLUP]:
