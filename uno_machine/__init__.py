@@ -68,10 +68,8 @@ class Pin:
 
     def toggle(self):
         if self.value():
-            print('KALDER OFF')
             self.off()
         else:
-            print('KALDER ON')
             self.on()
 
 
@@ -176,8 +174,11 @@ class SoftI2C(I2C):
 class SPI:
     MSB=0
     LSB=1
+    SCK=None
+    MOSI=None
+    MISO=None
 
-    def __init__(self, pin, baudrate=1000000, *, polarity=0, phase=0, bits=8, firstbit=SPI.MSB, sck=None, mosi=None, miso=None, pins=(SCK, MOSI, MISO)):
+    def __init__(self, pin, baudrate=1000000, *, polarity=0, phase=0, bits=8, firstbit=MSB, sck=None, mosi=None, miso=None, pins=(SCK, MOSI, MISO)):
         pass
 
     def deinit(self):
