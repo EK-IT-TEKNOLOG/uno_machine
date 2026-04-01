@@ -122,7 +122,7 @@ class ADC:
         return sum(vals)/numbers
 
     def write(self, value):
-        pass
+        res = requests.get(f'http://localhost:7000/analog_write/{self.pin.pin_no}/{value}')
 
 class I2C:
     def __init__(self, scl, sda, freq=400000):
