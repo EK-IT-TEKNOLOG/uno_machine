@@ -126,8 +126,13 @@ class ADC:
         res = requests.get(f'http://localhost:7000/analog_write/{self.pin.pin_no}/{value}')
 
 class I2C:
-    def __init__(self, scl, sda, freq=400000):
-        pass
+    def __init__(self, addr, scl=21, sda=20, freq=400000):
+        #TODO: Make it possible to use this class for slave as well using the addr given
+        self.addr=addr
+        self.scl=scl
+        self.sda=sda
+        self.freq=freq
+        res = requests.get(f'http://localhost:7000/init_i2c')
 
     def deinit(self):
         pass
@@ -145,28 +150,36 @@ class I2C:
         pass
 
     def write(self, buf):
-        pass
+        res = requests.get(f'http://localhost:7000/write_i2c/{self.addr}/{buf}')
 
-    def readfrom(self, addr, buf, stop=True):
-        pass
+    def readfrom(self, addr, buflen, stop=True):
+        self.addr = addr
+        res = requests.get(f'http://localhost:7000/read_i2c/{self.addr}/{buflen}')
+        return eval(red.text.strip())
 
     def readfrom_into(self, addr, buf, stop=True):
         pass
 
     def writeto(self, addr, buf, stop=True):
-        pass
+        self.addr=addr
+        self.write(buf)
 
     def writevto(self, addr, vector, stop=True):
-        pass
+        self.writeto(addr, vector, stop)
 
     def readfrom_mem(self, addr, memaddr, nbytes, addrsize=8):
-        pass
+        self.addr = addr
+        self.write([memaddr])
+        return self.readfrom(addr, nbytes)
 
     def eadfrom_mem_into(self, addr, memaddr, buf, addrsize=8):
         pass
 
     def writeto_mem(self, addr, memaddr, buf, addrsize=8):
-        pass
+        self.addr = addr
+        new_buf = [memaddr]
+        new_buf.extend(buf)
+        self.write(buf)
 
 class SoftI2C(I2C):
     pass
@@ -200,3 +213,34 @@ class SPI:
 
 class SoftSPI(SPI):
     pass
+
+class UART:
+    def __init__(self, tx=None, rx=None, rts=None, cts=None, txbuf=None, rxbuf=None, timeout_ms=None, timeout_char_ms=None, invert=None, flow=None, buardrate=9600, bits=8, parity=None, stop=1):
+        pass
+
+    def deinit(self):
+        pass
+
+    def any(self):
+        pass
+
+    def read(selfm nbytes=None):
+        pass
+
+    def readinto(self, buf, nbytes=None):
+        pass
+
+    def readline(self):
+        pass
+
+    def write(self, buf):
+        pass
+
+    def sendbreak(self):
+        pass
+
+    def flush(self):
+        pass
+
+    def txdone(self):
+        pass
