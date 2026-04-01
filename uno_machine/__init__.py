@@ -76,14 +76,112 @@ class Pin:
 
 
 class PWM:
-    pass
+    def __init__(self, pin):
+        pass
+
+    def deinit(self):
+        pass
+
+    def freq(self, freq=None):
+        pass
+
+    def duty(self, duty=None):
+        pass
+
+    def duty_u16(self, duty=None):
+        pass
+
+    def duty_ns(self, duty=None):
+        pass
 
 class ADC:
-    pass
+    def __init__(self, pin):
+        pass
+
+    def read_uv(self):
+        pass
+
+    def read(self):
+        pass
+
+    def atten(self, atten):
+        pass
+
+    def width(self, width):
+        pass
+
+    def deinit(self):
+        pass
 
 class I2C:
+    def __init__(self, scl, sda, freq=400000):
+        pass
+
+    def deinit(self):
+        pass
+
+    def scan(self):
+        pass
+
+    def start(self):
+        pass
+
+    def stop(self):
+        pass
+
+    def readinto(self, buf, nack=True):
+        pass
+
+    def write(self, buf):
+        pass
+
+    def readfrom(self, addr, buf, stop=True):
+        pass
+
+    def readfrom_into(self, addr, buf, stop=True):
+        pass
+
+    def writeto(self, addr, buf, stop=True):
+        pass
+
+    def writevto(self, addr, vector, stop=True):
+        pass
+
+    def readfrom_mem(self, addr, memaddr, nbytes, addrsize=8):
+        pass
+
+    def eadfrom_mem_into(self, addr, memaddr, buf, addrsize=8):
+        pass
+
+    def writeto_mem(self, addr, memaddr, buf, addrsize=8):
+        pass
+
+class SoftI2C(I2C):
     pass
 
 class SPI:
-    pass
+    MSB=0
+    LSB=1
 
+    def __init__(self, pin, baudrate=1000000, *, polarity=0, phase=0, bits=8, firstbit=SPI.MSB, sck=None, mosi=None, miso=None, pins=(SCK, MOSI, MISO)):
+        pass
+
+    def deinit(self):
+        pass
+
+    def read(self, nbytes, write=0x00):
+        pass
+    
+    def readinto(self, buf, write=0x00):
+        pass
+
+    def write(self, buf):
+        pass
+
+    def write_readinto(self, write_buf, read_buf):
+        pass
+
+
+
+class SoftSPI(SPI):
+    pass
