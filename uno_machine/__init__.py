@@ -115,11 +115,14 @@ class ADC:
     def deinit(self):
         pass
 
-    def read_more(self, numbers=255):
+    def read_stable(self, numbers=255):
         vals = []
         for i in range(numbers):
             vals.append(self.read())
         return sum(vals)/numbers
+
+    def write(self, value):
+        pass
 
 class I2C:
     def __init__(self, scl, sda, freq=400000):
