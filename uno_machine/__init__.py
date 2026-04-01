@@ -15,7 +15,7 @@ class Pin:
         self.pin_no = pin_no
         
     def on(self):
-        print('[+] Kalder on på port',self.pin_no)
+        #print('[+] Kalder on på port',self.pin_no)
         res = requests.get(f'http://localhost:7000/pin_on/{self.pin_no}')
 
     def off(self):
@@ -36,9 +36,11 @@ class Pin:
             return False
         else:
             res = requests.get(f'http://localhost:7000/pin_status/{self.pin_no}')
-            print('SVAR',res.text)
+            print('*****************************')
+            print('SVAR',res.text.strip())
+            print('SVAR2',res.text.strip() == 'false')
             #print('TEST',res.text.strip() == '0')
-            return res.text.strip() == '1'
+            return not (res.text.strip() == 'false')
 
 
     def mode(self):
