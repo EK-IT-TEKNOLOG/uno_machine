@@ -77,22 +77,25 @@ class Pin:
 
 class PWM:
     def __init__(self, pin):
-        pass
+        self.pin = pin
 
     def deinit(self):
         pass
 
     def freq(self, freq=None):
-        pass
+        raise 'Freq is always set to 500 hz - Read https://docs.arduino.cc/tutorials/uno-q/user-manual/#pwm-pins'
 
-    def duty(self, duty=None):
-        pass
+    def duty(self, duty=0):
+        res = requests.get(f'http://localhost:7000/analog_write/{self.pin.pin_no}/{duty}')
 
     def duty_u16(self, duty=None):
         pass
 
     def duty_ns(self, duty=None):
         pass
+
+    def set_resulotion(self, bits):
+        res = requests.get(f'http://localhost:7000/analog_write_res/{bits}')
 
 class ADC:
     def __init__(self, pin):
