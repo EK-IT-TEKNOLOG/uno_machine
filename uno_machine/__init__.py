@@ -50,9 +50,9 @@ class Pin:
             return False
         else:
             res = requests.get(f'http://localhost:7000/pin_status/{self.pin_no}')
-            print('*****************************')
-            print('SVAR',res.text.strip())
-            print('SVAR2',res.text.strip() == 'false')
+            #print('*****************************')
+            #print('SVAR',res.text.strip())
+            #print('SVAR2',res.text.strip() == 'false')
             #print('TEST',res.text.strip() == '0')
             return not (res.text.strip() == 'false')
 
@@ -96,22 +96,30 @@ class PWM:
 
 class ADC:
     def __init__(self, pin):
-        pass
+        self.pin = pin
 
     def read_uv(self):
         pass
 
     def read(self):
-        pass
+        res = requests.get(f'http://localhost:7000/analog_read/{self.pin.pin_no}')
+        return int(res.text.strip())
 
-    def atten(self, atten):
-        pass
+    def atten(self, atten=10):
+        '''Set the resulution in bits (from 1 to 32)'''
+        res = requests.get(f'http://localhost:7000/analog_atten/{atten}')
 
     def width(self, width):
         pass
 
     def deinit(self):
         pass
+
+    def read_more(self, numbers=255):
+        vals = []
+        for i in range(numbers):
+            vals.append(self.read())
+        return sum(vals)/numbers
 
 class I2C:
     def __init__(self, scl, sda, freq=400000):
