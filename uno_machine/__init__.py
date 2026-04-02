@@ -216,25 +216,40 @@ class SoftSPI(SPI):
 
 class UART:
     def __init__(self, tx=None, rx=None, rts=None, cts=None, txbuf=None, rxbuf=None, timeout_ms=None, timeout_char_ms=None, invert=None, flow=None, buardrate=9600, bits=8, parity=None, stop=1):
-        pass
+        res = requests.get(f'http://localhost:7000/init_uart/{baudrate}')
 
     def deinit(self):
-        pass
+        res = requests.get(f'http://localhost:7000/deinit_uart')
 
     def any(self):
-        pass
+        res = requests.get(f'http://localhost:7000/avaiable_data_uart')
+        return bool(res.text)
 
-    def read(selfm nbytes=None):
-        pass
+    def read(self, nbytes=None):
+        if not nbytes:
+            res = requests.get(f'http://localhost:7000/read_uart/')
+            return int(res.text)
+        else:
+            res_data = []
+            for i in range(nbytes):
+                res = requests.get(f'http://localhost:7000/read_uart/')
+                res_data.append(int(res.text))
+            return res_data
+
 
     def readinto(self, buf, nbytes=None):
         pass
 
     def readline(self):
-        pass
+        res_data = []
+        r = self.read()
+        while not r == '\n':
+            res_data.append(r)
+            r = self.read()
+        return res_data
 
     def write(self, buf):
-        pass
+        res = requests.get(f'http://localhost:7000/write_uart/{buf}')
 
     def sendbreak(self):
         pass
