@@ -192,22 +192,29 @@ class SPI:
     MISO=None
 
     def __init__(self, pin, baudrate=1000000, *, polarity=0, phase=0, bits=8, firstbit=MSB, sck=None, mosi=None, miso=None, pins=(SCK, MOSI, MISO)):
-        pass
+        self.pin = pin
+        res = requests.get(f'http://localhost:7000/init_spi/{self.pin.pin_no}')
 
     def deinit(self):
         pass
 
     def read(self, nbytes, write=0x00):
-        pass
-    
+        if not type(write) == list:
+            write = [write]
+        res = requests.get(f'http://localhost:7000/tx_rx_spi/{self.pin.pin_no}/{write}')
+        return eval(res.text)
+
     def readinto(self, buf, write=0x00):
-        pass
+        buf = self.read(len(buf), write)
 
     def write(self, buf):
-        pass
+        if not type(buf) == list:
+            buf = [buf]
+        res = requests.get(f'http://localhost:7000/tx_rx_spi/{self.pin.pin_no}/{buf}')
+        return eval(res.text)
 
     def write_readinto(self, write_buf, read_buf):
-        pass
+        self.readinto(read_buf, write_buf)
 
 
 
