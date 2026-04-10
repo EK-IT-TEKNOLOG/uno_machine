@@ -138,7 +138,8 @@ class I2C:
         pass
 
     def scan(self):
-        pass
+        res = requests.get('http://localhost:7000/scan_i2c')
+        return eval(res.text)
 
     def start(self):
         pass
@@ -149,13 +150,14 @@ class I2C:
     def readinto(self, buf, nack=True):
         pass
 
-    def write(self, buf):
-        res = requests.get(f'http://localhost:7000/write_i2c/{self.addr}/{buf}')
+    def write(self, buf, end_comm=True):
+        print(f'[+] BUF TO SEND: {buf}')
+        res = requests.get(f'http://localhost:7000/write_i2c/{self.addr}/{buf}/{end_comm}')
 
     def readfrom(self, addr, buflen, stop=True):
         self.addr = addr
         res = requests.get(f'http://localhost:7000/read_i2c/{self.addr}/{buflen}')
-        return eval(red.text.strip())
+        return eval(res.text.strip())
 
     def readfrom_into(self, addr, buf, stop=True):
         pass
@@ -169,17 +171,25 @@ class I2C:
 
     def readfrom_mem(self, addr, memaddr, nbytes, addrsize=8):
         self.addr = addr
-        self.write([memaddr])
+        addr_buf = []
+        if addrsize == 16:
+            addr_buf.append((memaddr & 0xFF00)>8)
+        addr_buf.append(memaddr&0xFF)
+        self.write(addr_buf)
+        #self.write([memaddr], end_comm=False)
         return self.readfrom(addr, nbytes)
 
-    def eadfrom_mem_into(self, addr, memaddr, buf, addrsize=8):
+    def readfrom_mem_into(self, addr, memaddr, buf, addrsize=8):
         pass
 
     def writeto_mem(self, addr, memaddr, buf, addrsize=8):
         self.addr = addr
-        new_buf = [memaddr]
+        new_buf = []
+        if addrsize == 16:
+            new_buf.append((memaddr & 0xFF00)>8)
+        new_buf.append(memaddr&0xFF)
         new_buf.extend(buf)
-        self.write(buf)
+        self.write(new_buf)
 
 class SoftI2C(I2C):
     pass
@@ -222,6 +232,7 @@ class SoftSPI(SPI):
     pass
 
 class UART:
+    """ RX/TX is always D0/D1 """
     def __init__(self, tx=None, rx=None, rts=None, cts=None, txbuf=None, rxbuf=None, timeout_ms=None, timeout_char_ms=None, invert=None, flow=None, baudrate=9600, bits=8, parity=None, stop=1):
         res = requests.get(f'http://localhost:7000/init_uart/{baudrate}')
         print(res.text)
