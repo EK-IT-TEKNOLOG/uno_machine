@@ -201,6 +201,14 @@ class SPI:
     MOSI=None
     MISO=None
 
+    '''
+    Default pins for SPI on Uno Q
+    CS = 10
+    MOSI = 11
+    MISO = 12
+    SCL = 13
+    '''
+
     def __init__(self, pin, baudrate=1000000, *, polarity=0, phase=0, bits=8, firstbit=MSB, sck=None, mosi=None, miso=None, pins=(SCK, MOSI, MISO)):
         self.pin = pin
         res = requests.get(f'http://localhost:7000/init_spi/{self.pin.pin_no}')
@@ -210,22 +218,31 @@ class SPI:
 
     def read(self, nbytes, write=0x00):
         if not type(write) == list:
-            write = [write]
+            try:
+                write = list(write)
+            except:
+                write = [write]
         res = requests.get(f'http://localhost:7000/tx_rx_spi/{self.pin.pin_no}/{write}')
         return eval(res.text)
 
     def readinto(self, buf, write=0x00):
         buf = self.read(len(buf), write)
+        print('[+] GOT',buf)
+        return buf
 
     def write(self, buf):
         if not type(buf) == list:
-            buf = [buf]
+            try:
+                buf = list(buf)
+            except:
+                buf = [buf]
+        print(f'[+] SENDING {buf}')
         res = requests.get(f'http://localhost:7000/tx_rx_spi/{self.pin.pin_no}/{buf}')
         return eval(res.text)
 
     def write_readinto(self, write_buf, read_buf):
-        self.readinto(read_buf, write_buf)
-
+        res = self.readinto(read_buf, write_buf)
+        return bytearray(res)
 
 
 class SoftSPI(SPI):
