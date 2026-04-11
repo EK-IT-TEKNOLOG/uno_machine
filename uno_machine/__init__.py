@@ -321,4 +321,25 @@ class Neopixel:
         
     def clear(self):
         res = requests.get(f'http://localhost:7000/clear_colors')
-        
+
+class DHT:
+    DHT11 = 11
+    DHT12 = 12
+    DHT21 = 21
+    DHT22 = 22
+
+    def __init__(self, pin, dht_type):
+        self.pin = pin
+        self.type = dht_type
+        res = requests.get(f'http://localhost:7000/init_dht/{self.pin.pin_no}/{dht_type}')
+
+    def read_temp(self):
+        res = requests.get(f'http://localhost:7000/dht_read_temp/{self.pin.pin_no}')
+        print('[+] GOT TEMP:',res.text)
+        return eval(res.text)
+
+    def read_hum(self):
+        res = requests.get(f'http://localhost:7000/dht_read_hum/{self.pin.pin_no}')
+        print('[+] GOT HUM:',res.text)
+        return eval(res.text)
+
