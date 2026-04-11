@@ -155,7 +155,7 @@ class I2C:
         pass
 
     def write(self, buf, end_comm=True):
-        print(f'[+] BUF TO SEND: {buf}')
+        #print(f'[+] BUF TO SEND: {buf}')
         res = requests.get(f'http://localhost:7000/write_i2c/{self.addr}/{buf}/{end_comm}')
 
     def readfrom(self, addr, buflen, stop=True):
@@ -216,7 +216,7 @@ class SPI:
     def __init__(self, pin, baudrate=1000000, *, polarity=0, phase=0, bits=8, firstbit=MSB, sck=None, mosi=None, miso=None, pins=(SCK, MOSI, MISO)):
         self.pin = pin
         res = requests.get(f'http://localhost:7000/init_spi/{self.pin.pin_no}')
-        print('[+] SPI INIT STATIS:',res.text)
+        #print('[+] SPI INIT STATIS:',res.text)
 
     def deinit(self):
         pass
@@ -232,7 +232,7 @@ class SPI:
 
     def readinto(self, buf, write=0x00):
         buf = self.read(len(buf), write)
-        print('[+] GOT',buf)
+        #print('[+] GOT',buf)
         return buf
 
     def write(self, buf):
@@ -241,7 +241,7 @@ class SPI:
                 buf = list(buf)
             except:
                 buf = [buf]
-        print(f'[+] SENDING {buf}')
+        #print(f'[+] SENDING {buf}')
         res = requests.get(f'http://localhost:7000/tx_rx_spi/{self.pin.pin_no}/{buf}')
         return eval(res.text)
 
@@ -257,7 +257,7 @@ class UART:
     """ RX/TX is always D0/D1 """
     def __init__(self, tx=None, rx=None, rts=None, cts=None, txbuf=None, rxbuf=None, timeout_ms=None, timeout_char_ms=None, invert=None, flow=None, baudrate=9600, bits=8, parity=None, stop=1):
         res = requests.get(f'http://localhost:7000/init_uart/{baudrate}')
-        print(res.text)
+        #print(res.text)
 
     def deinit(self):
         res = requests.get(f'http://localhost:7000/deinit_uart')
@@ -335,11 +335,11 @@ class DHT:
 
     def read_temp(self):
         res = requests.get(f'http://localhost:7000/dht_read_temp/{self.pin.pin_no}')
-        print('[+] GOT TEMP:',res.text)
+        #print('[+] GOT TEMP:',res.text)
         return eval(res.text)
 
     def read_hum(self):
         res = requests.get(f'http://localhost:7000/dht_read_hum/{self.pin.pin_no}')
-        print('[+] GOT HUM:',res.text)
+        #print('[+] GOT HUM:',res.text)
         return eval(res.text)
 
