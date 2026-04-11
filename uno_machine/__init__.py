@@ -212,6 +212,7 @@ class SPI:
     def __init__(self, pin, baudrate=1000000, *, polarity=0, phase=0, bits=8, firstbit=MSB, sck=None, mosi=None, miso=None, pins=(SCK, MOSI, MISO)):
         self.pin = pin
         res = requests.get(f'http://localhost:7000/init_spi/{self.pin.pin_no}')
+        print('[+] SPI INIT STATIS:',res.text)
 
     def deinit(self):
         pass
