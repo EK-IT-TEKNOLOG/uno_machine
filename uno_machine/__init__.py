@@ -14,11 +14,13 @@ Built in LEDS:
 
 class Pin:
     OUTPUT=1
+    OUT=1
     INPUT=0
+    IN=0
     PULLUP=2
     LEGAL_PIN_NUMBERS = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,50,51,52,53,54,55]
     ANALOG_TO_DIGIAL_NUMBERS={'A0':14,'A1':15,'A2':16,'A3':17,'A4':18,'A5':19}
-    def __init__(self, pin_no, direction=1):
+    def __init__(self, pin_no, direction=1, pullup=False):
         if pin_no in self.ANALOG_TO_DIGIAL_NUMBERS:
             pin_no = self.ANALOG_TO_DIGIAL_NUMBERS[pin_no]
         if not pin_no in self.LEGAL_PIN_NUMBERS:
@@ -27,6 +29,7 @@ class Pin:
             raise 'Illegal direction'
         res = requests.get(f'http://localhost:7000/configure_pin/{pin_no}/{direction}')
         self.pin_no = pin_no
+        self.dir = direction
         
     def on(self):
         #print('[+] Kalder on på port',self.pin_no)
@@ -47,9 +50,10 @@ class Pin:
                 self.on()
             else:
                 self.off()
-            return False
+            return value
         else:
-            res = requests.get(f'http://localhost:7000/pin_status/{self.pin_no}')
+            in_pin = not (self.dir == self.OUTPUT)
+            res = requests.get(f'http://localhost:7000/pin_status/{self.pin_no}/{in_pin}')
             #print('*****************************')
             #print('SVAR',res.text.strip())
             #print('SVAR2',res.text.strip() == 'false')
