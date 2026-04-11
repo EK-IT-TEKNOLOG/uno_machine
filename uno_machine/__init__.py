@@ -301,3 +301,24 @@ class UART:
 
     def txdone(self):
         pass
+
+class Neopixel:
+    def __init__(self, led_pin, no_of_pixels):
+        self.pin = led_pin
+        self.no_of_pixels = no_of_pixels
+        self.leds = [(0,0,0)]*no_of_pixels
+        res = requests.get(f'http://localhost:7000/init_neopixel/{self.no_of_pixels}/{self.pin.pin_no}')
+
+    def __setitem__(self,key,value):
+        self.leds[key] = value
+
+    def __getitem__(self,i):
+        return self.leds[i]
+
+    def write(self):
+        res = requests.get(f'http://localhost:7000/set_pixel_color/{self.leds}')
+        res = requests.get(f'http://localhost:7000/show_colors')
+        
+    def clear(self):
+        res = requests.get(f'http://localhost:7000/clear_colors')
+        
